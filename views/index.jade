@@ -1,5 +1,38 @@
 extends layout
-
+- var search = {status : 'start'}
 block content
-  h1= title
-  p Welcome to #{title}
+
+  h1 Ну, понеслась.. wellcome to #{title}
+  p
+    | Постарайся, анон-кун,
+    | и найди тян, наконец.
+  p.
+    удачи :3
+  h1 ^__# Good lock!!~ <3
+  form(name="search", action=".", method="post")
+    table
+      tr
+        td
+          b.
+            q:
+        td
+          input(type="text", name="q", value="Лаура")
+      tr
+        td
+          b.
+            age_from:
+        td
+          input(type="text", name="age_from", value="18")
+      tr
+        td
+          b.
+            age_to:
+        td
+          input(type="text", name="age_to", value="25")
+
+      tr
+        td
+          b.
+            lets_search:
+        td
+          input(type="submit", name="submit",value="search")
