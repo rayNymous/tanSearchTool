@@ -1,5 +1,4 @@
-////////////VARIABLES
-
+//С…СЂР°РЅРёРјР°СЏ РїСЂРѕС†РµРґСѓСЂР° РґР»СЏ РІС‚РµРЅС‚Р°РєР»Рµ.Р°РїРё
 //couners for statistics
 var wallposts=5;
 var groupscount=20;
@@ -20,14 +19,14 @@ var max_photos=1000;
 
 //search
 var search_q = Args.q;
-var search_sort = Args.sort;// 1 - по дате регистрации, 0 - по популярности 
+var search_sort = Args.sort;// 1 - РїРѕ РґР°С‚Рµ СЂРµРіРёСЃС‚СЂР°С†РёРё, 0 - РїРѕ РїРѕРїСѓР»СЏСЂРЅРѕСЃС‚Рё 
 var count= Args.count;
 var offset = Args.offset;
 var city = Args.city;//code
 var university = Args.university;
 var university_year = Args.gradyear;
-var sex =Args.sex; //пол, 1 — женщина, 2 — мужчина, 0 (по умолчанию) — любой. 
-var sp = Args.sp; // семейное положение: 1 — Не женат, 2 — Встречается, 3 — Помолвлен, 4 — Женат, 7 — Влюблён, 5 — Всё сложно, 6 — В активном поиске. 
+var sex =Args.sex; //РїРѕР», 1 вЂ” Р¶РµРЅС‰РёРЅР°, 2 вЂ” РјСѓР¶С‡РёРЅР°, 0 (РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ) вЂ” Р»СЋР±РѕР№. 
+var sp = Args.sp; // СЃРµРјРµР№РЅРѕРµ РїРѕР»РѕР¶РµРЅРёРµ: 1 вЂ” РќРµ Р¶РµРЅР°С‚, 2 вЂ” Р’СЃС‚СЂРµС‡Р°РµС‚СЃСЏ, 3 вЂ” РџРѕРјРѕР»РІР»РµРЅ, 4 вЂ” Р–РµРЅР°С‚, 7 вЂ” Р’Р»СЋР±Р»С‘РЅ, 5 вЂ” Р’СЃС‘ СЃР»РѕР¶РЅРѕ, 6 вЂ” Р’ Р°РєС‚РёРІРЅРѕРј РїРѕРёСЃРєРµ. 
 var age_from = Args.age_from;
 var age_to = Args.age_to;
 var online = Args.online;
