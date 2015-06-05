@@ -12,7 +12,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '2999');
 app.set('port', port);
 
 /**
@@ -88,3 +88,44 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+/////////////////////////////////////////////////////////////
+var q = 'vk_crate';
+
+var open = require('amqplib').connect("amqp://rabbit:rabbit@192.168.1.5:5672/vk_crate");
+var elasticsearch=require("elasticsearch");
+var Client=new elasticsearch.Client({host: '192.168.1.5:4200'});
+
+Client.cluster.health(function (err, resp) {
+  if (err) {
+    console.error("EL_err "+err.message.toString());
+  } else {
+    console.dir("EL_normal "+resp.toString());
+  }
+});
+
+open.then(function(conn) {
+  var imqpChannel = conn.createChannel();
+  imqpChannel = imqpChannel.then(function(ch) {
+    ch.assertQueue(q);
+    ch.consume(q, function(msg) {
+      if (msg !== null) {
+        ch.ack(msg);
+        var a=msg.content.toString();
+        var b = JSON.parse(a);
+        var D = new Date();
+        b.updated=D;
+
+        Client.index({
+          index : 'tans',
+          type :' default',
+          id : parseInt(b.userInfo.id),
+          body: b
+        }, function (error, response) {
+          console.log("response" + response);
+          console.log("error" + error);
+        });
+      }
+    });
+  });
+  return imqpChannel;
+}).then(null, console.warn);

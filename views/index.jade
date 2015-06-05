@@ -2,73 +2,156 @@ extends layout
 - var search = {status : 'start'}
 block content
 
-  h1 Ну, понеслась.. wellcome to #{title}
+  h1(class='header') Ну, понеслась.. wellcome to #{title}
   p
     | Постарайся, анон-кун,
+  p
     | и найди тян, наконец.
+  p
+    | и помни,
+  p
+    |"не суди человека по внешности,
+  p
+    |а суди по пабликам на которые он подписан" (c)
   p.
     удачи :3
   h1 ^__# Good luck!!~ <3
   form(name="form2", action="/search:start", method="get")
-    table
-      tr
-        td
-          b.
-            q:
-        td
-          input(type="text", name="q", value="Лаура")
-      tr
-        td
-          b.
-            age_from:
-        td
-          input(type="text", name="age_from", value="18")
-      tr
-        td
-          b.
-            age_to:
-        td
-          input(type="text", name="age_to", value="25")
-      tr
-        td
-          b.
-            sex:
-        td
-          input(type="text", name="sex", value="")
-      tr
-        td
-          b.
-            city:
-        td
-          input(type="text", name="sity", value="")
-      tr
-        td
-          b.
-            interests:
-        td
-          input(type="text", name="interests", value="")
-      tr
-        td
-          b.
-            university:
-        td
-          input(type="text", name="university", value="")
-      tr
-        td
-          b.
-            gradyear:
-        td
-          input(type="text", name="gradyear", value="")
-      tr
-        td
-          b.
-            sp:
-        td
-          input(type="text", name="sp", value="")
 
-      tr
-        td
-          b.
-            lets_search:
-        td
-          input(type="submit", name="submit",value="search")
+    div(class='right')
+      table
+        tr
+          td
+            b.
+              min_group:
+          td
+            input(type="text", name="min_group", value="0")
+        tr
+          td
+            b.
+              max_group:
+          td
+            input(type="text", name="max_group", value="1000")
+        tr
+          td
+            b.
+              min_friends:
+          td
+            input(type="text", name="min_friends", value="0")
+        tr
+          td
+            b.
+              max_friends:
+          td
+            input(type="text", name="max_friends", value="200")
+        tr
+          td
+            b.
+              min_wall:
+          td
+            input(type="text", name="min_wall", value="0")
+        tr
+          td
+            b.
+              max_wall:
+          td
+            input(type="text", name="max_wall", value="100000")
+        tr
+          td
+            b.
+              min_subscr:
+          td
+            input(type="text", name="min_subscr", value="1")
+        tr
+          td
+            b.
+              max_subscr:
+          td
+            input(type="text", name="max_subscr", value="100")
+        tr
+          td
+            b.
+              min_photos:
+          td
+            input(type="text", name="min_photos", value="0")
+        tr
+          td
+            b.
+              max_photos:
+          td
+            input(type="text", name="max_photos", value="1000")
+
+
+    div(class='left')
+      table
+        tr
+          td
+            b.
+              q:
+          td
+            input(type="text", name="q", value="",)
+        tr
+          td
+            b.
+              age_from:
+          td
+            input(type="text", name="age_from", value="18")
+        tr
+          td
+            b.
+              age_to:
+          td
+            input(type="text", name="age_to", value="25")
+        tr
+          td
+            b.
+              sex:
+          td
+            input(type="text", name="sex", value="1")
+        tr
+          td
+            b.
+              city:
+          td
+            input(type="text", name="city", value="119")
+        tr
+          td
+            b.
+              online:
+          td
+            input(type="text", name="online", value="0")
+        tr
+          td
+            b.
+              interests:
+          td
+            input(type="text", name="interests", value="")
+        tr
+          td
+            b.
+              university:
+          td
+            input(type="text", name="university", value="")
+        tr
+          td
+            b.
+              gradyear:
+          td
+            input(type="text", name="gradyear", value="")
+        tr
+          td
+            b.
+              sp:
+          td
+            input(type="text", name="sp", value="0")
+        tr
+          td
+            b.
+              gid:
+          td
+            input(type="text", name="gid", value="20629724")
+    divdiv(class='buttons')
+      input(type="submit", name="submit",value="search")
+
+      a(href="https://oauth.vk.com/authorize?client_id=4370305&scope=friends,offline&redirect_uri=https://oauth.vk.com/blank.html&display=page&v=5.21&response_type=token").
+        get oauth token

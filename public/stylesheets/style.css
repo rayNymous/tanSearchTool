@@ -6,3 +6,33 @@ body {
 a {
   color: #00B7FF;
 }
+
+.left{
+  position: relative;
+  left:100px;
+  background-color: azure;
+  width: 700px;
+  top: -240px;
+}
+
+.right{
+  position: relative;
+  left:400px;
+  background-color: beige;
+  width: 400px;
+  top: -240px;
+}
+
+.buttons{
+  position: relative;
+  left:100px;
+  background-color: beige;
+  width: 400px;
+  top: -140px;
+}
+
+.header
+{
+  background-color: #f15a23;
+  color: white;
+}

@@ -1,26 +1,22 @@
-//хранимая процедура для втентакле.апи
-//couners for statistics
+var count=4;// Args.count; COUNT IS HERE. Not forward it from scripts
+
 var wallposts=5;
 var groupscount=20;
-var friendscount=20;
+var friendscount=30;
 var photos_count =5;
 
-//drop variables
-var min_group=0;
-var max_group=1000;
-var min_firneds=0;
-var max_firneds=1000;
-var min_wall=0;
-var max_wall=100000;
-var min_subscr=0;
-var max_subscr=10001;
-var min_photos=0;
-var max_photos=1000;
-
-//search
+var min_group=Args.min_group;
+var max_group=Args.max_group;
+var min_firneds=Args.min_friends;
+var max_firneds=Args.max_friends;
+var min_wall= Args.min_wall;
+var max_wall= Args.max_wall;
+var min_subscr= Args.min_subscr;
+var max_subscr= Args.max_subscr;
+var min_photos= Args.min_photos;
+var max_photos= Args.max_photos;
 var search_q = Args.q;
 var search_sort = Args.sort;// 1 - по дате регистрации, 0 - по популярности 
-var count= Args.count;
 var offset = Args.offset;
 var city = Args.city;//code
 var university = Args.university;
@@ -33,40 +29,41 @@ var online = Args.online;
 var interests =Args.interests;
 var group_id = Args.gid;
 
-//wall local variables 
 var i; var out_wallpic;var out_text;var rep_wallpic;var rep_text;
 var outWall;var wall;var items; var wcount;
-//group local variables
 var groups;var outGroups; var gcount;
-//friends local variables
 var j; var friends; var outFriends;var cityes; var universities;
-var graduation; var outFriends; var fcount;
-//user local variables
+var graduation; var outFriends; var fcount; var friendsSex;
 var user; var subscr;
-//photos
 var photos;var pcount; var pitems; var f; var outPhotos;
-
-//output
 var OUTPUT=[]; var COunter; var OUTUser; 
 
-//FILTER SECTION
-var IDs= API.users.search({
-    "q" : search_q, "sort":search_sort, "count" : count, 
-    "offset" : offset, "city": city, "university": university, 
-    "university_year" : university_year, "sex": sex, 
-    "status" : sp, "age_from": age_from, "age_to":age_to, 
+var searchResult= API.users.search({//CHECK for offset !=''
+    "q" : search_q, "sort":search_sort, 
+    "count" : count, "country" :1, 
+    "offset" : offset,
+    "city": city,
+    "university": university, 
+    "university_year" : university_year,
+    "sex": sex, 
+    "status" : sp,  "age_from": age_from, "age_to":age_to, 
     "online":online, "interests":interests,
     "group_id": group_id
-}).items@.id;
+});
+
+var IDs= searchResult.items@.id;
+var ResultCount= searchResult.count;
+if(offset >= ResultCount)
+{
+    return "EXIT"; 
+}
 var z=IDs.length-1;
 
 while(z>=0){
-    ///////////WALL
     wall= API.wall.get({"owner_id":IDs[z],
     "count": wallposts, "filter":"owner", "extended" : 0});
-    wcount=wall.count;
-    items=wall.items;i=items.length-1;
-    out_wallpic=[]; out_text=[]; rep_wallpic=[]; rep_text=[]; outWall=[];
+    wcount=wall.count;items=wall.items;i=wallposts-1;
+    out_wallpic=[]; out_text=[]; rep_wallpic=[]; rep_text=[];
     while (i>=0) 
     { 
         out_wallpic.push(items@.attachments[i][0].photo.photo_604);
@@ -75,40 +72,45 @@ while(z>=0){
         rep_text.push(items[i].copy_history[0].text);
         i=i-1;
     };
-    outWall.push(out_text);
-    outWall.push(out_wallpic);
-    outWall.push(rep_wallpic);
-    outWall.push(rep_text);
+    outWall = { "texts":out_text,
+                "pics":out_wallpic,
+                "repPics":rep_wallpic,
+                "repTexts":rep_text};
     
-    ///////////////GROUPS
-    outGroups=[];
     groups = API.groups.get({"count":groupscount,"user_id": IDs[z] ,"extended":1});
     gcount=groups.count;
-    outGroups= ([groups.items@.name,
-                    groups.items@.screen_name,
-                    groups.items@.is_admin,
-                    groups.items@.photo_100 ]);
+    outGroups= {"grpNames":groups.items@.name,
+                "grpScreenNames":groups.items@.screen_name,
+                "grpIsAdmin":groups.items@.is_admin };
                     
-    //////////////FRIENDS
     friends = API.friends.get({"user_id":IDs[z],"count":friendscount,
-        "user_id":"1010103", "fields":"[city, universities, education ]"});
-    cityes=[]; universities=[]; graduation=[]; outFriends=[];
+   "fields":["city", "universities", "education","sex"]});
+    cityes=[]; universities=[]; graduation=[];friendsSex=[];
     fcount=friends.count;
-    j=friends.length-1;
+    
+    if( friendscount < fcount) 
+        j= friendscount-1;
+    else
+        j= fcount -1;
+    var analisedcount =j; analisedcount=analisedcount+1;
     while(j>= 0)
     {
         if(friends.items[j].city.title)
             cityes.push( friends.items[j].city.title);
         if(friends.items@.universities[j][0].name)
-            universities.push(friends.items@.universities[j][0].name);
+                universities.push(friends.items@.universities[j][0].name);
         if(friends.items@.universities[j][0].graduation)
             graduation.push(friends.items@.universities[j][0].graduation);
+            friendsSex.push( friends.items[j].sex);
         j=j-1;
     }
-    outFriends.push(cityes);
-    outFriends.push(universities);
-    outFriends.push(graduation);
-    outFriends.push(friends.count);
+    outFriends={"from":cityes,
+                "universities":universities,
+                "gradYears":graduation,
+                "fsex":friendsSex,
+                "analized":analisedcount
+        
+    };
     
     subscr= API.subscriptions.getFollowers({"uid":IDs[z]}).count;
     
@@ -116,17 +118,19 @@ while(z>=0){
     pcount = photos.count;
     pitems = photos.items;
     
-    f=photos_count; outPhotos=[];
+    f=photos_count-1; outPhotos=[];
     while(f>=0)
     {
-        outPhotos.push([pitems[f].photo_604]);
+        outPhotos.push(pitems[f].photo_604);
         f=f-1;
     }
 
-    ///////////////USER
-    user = API.users.get({"user_ids" : IDs[z],"fields":"[sex,bdate,city,"+
-    "photo_400,domain,site,education,status,relation,screen_name,"+
-    "interests,music,movies,tv,books,games,about,personal]"});
+    user = API.users.get({"user_id" : IDs[z],
+    "fields":["sex","bdate","city",
+    "photo_100","domain","site",
+    "education","status","relation","screen_name",
+    "interests","music","movies","tv","books",
+    "games","about","personal"]})[0];
     
     if(wcount > min_wall && wcount <max_wall)
     {
@@ -138,9 +142,17 @@ while(z>=0){
                 {
                     if(pcount >min_photos && pcount < max_photos)
                     {
-                        COunter = ([pcount, subscr, wcount, gcount, fcount]);
-                        OUTUser=([COunter, user, outGroups, outFriends, 
-                                outWall, outPhotos]);
+                        COunter = {"photos":pcount,
+                                    "subscribers":subscr,
+                                    "wallPosts":wcount,
+                                    "groups":gcount,
+                                    "friends":fcount};
+                        OUTUser={"counters":COunter,
+                                    "userInfo":user,
+                                    "groupsInfo":outGroups,
+                                    "friendsInfo":outFriends, 
+                                    "wallInfo":outWall,
+                                    "photos":outPhotos};
                         OUTPUT.push(OUTUser);
                     }
                 }
